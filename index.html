@@ -1,6 +1,293 @@
-extends includes/layout.pug
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>樱羽的个人简历</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#F87171', // 萌粉
+            secondary: '#A78BFA', // 柔紫
+            light: '#FDF2F8', // 浅粉背景
+            dark: '#4B5563', // 文字深灰
+          },
+          fontFamily: {
+            cute: ['"Comic Sans MS"', '"Microsoft YaHei"', 'sans-serif'],
+          },
+          boxShadow: {
+            'cute': '0 4px 12px rgba(248, 113, 113, 0.25)',
+            'purple': '0 4px 12px rgba(167, 139, 250, 0.25)',
+          }
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .bg-gradient-cute {
+        background: linear-gradient(135deg, #FDF2F8 0%, #F3E8FF 100%);
+      }
+      .card-cute {
+        @apply bg-white rounded-2xl shadow-cute p-6 hover:shadow-purple transition-all duration-300 transform hover:-translate-y-1;
+      }
+      .title-cute {
+        @apply text-2xl md:text-3xl font-bold text-primary mb-4 flex items-center gap-2;
+      }
+      .icon-cute {
+        @apply w-10 h-10 rounded-full bg-light flex items-center justify-center text-secondary;
+      }
+      .item-cute {
+        @apply border-l-4 border-secondary pl-4 py-2 mb-3 bg-light/50 rounded-r-lg;
+      }
+      .decor-cute {
+        @apply absolute -top-3 -right-3 w-12 h-12 bg-primary/20 rounded-full blur-sm;
+      }
+      .decor-purple {
+        @apply absolute -bottom-3 -left-3 w-12 h-12 bg-secondary/20 rounded-full blur-sm;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-cute min-h-screen font-cute text-dark pb-16">
+  <!-- 顶部卡通装饰 -->
+  <div class="w-full py-4 flex justify-center items-center">
+    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl">
+      <i class="fas fa-user"></i>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-bold text-primary ml-4">樱羽巧可</h1>
+  </div>
 
-block content
-  .posts
-    include includes/recent-posts.pug
-  #paginator!= paginator()
+  <!-- 主容器 -->
+  <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- 左侧个人信息栏 (占1列) -->
+    <div class="md:col-span-1">
+      <div class="card-cute relative">
+        <div class="decor-cute"></div>
+        <h2 class="title-cute">
+          <i class="fas fa-id-card-alt"></i>个人信息
+        </h2>
+        <ul class="space-y-3">
+          <li class="flex items-center gap-3">
+            <i class="fas fa-venus text-primary text-xl"></i>
+            <span>性别：女</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="fas fa-birthday-cake text-primary text-xl"></i>
+            <span>年龄：21岁</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="fas fa-map-marker-alt text-primary text-xl"></i>
+            <span>居住地：湖北宜昌</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="fas fa-phone text-primary text-xl"></i>
+            <span>电话：18120354815</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="fas fa-envelope text-primary text-xl"></i>
+            <span>邮箱：2684724974@qq.com</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="fas fa-user-graduate text-primary text-xl"></i>
+            <span>身份：家里蹲（待业中）</span>
+          </li>
+        </ul>
+
+        <!-- 教育背景 -->
+        <h2 class="title-cute mt-8">
+          <i class="fas fa-graduation-cap"></i>教育背景
+        </h2>
+        <div class="item-cute">
+          <h3 class="font-bold text-secondary text-lg">武汉职业技术学院</h3>
+          <p class="text-sm text-gray-600">2021.09 - 2025.06</p>
+          <p>人工智能学院 | 计算机应用技术 | 虽然是专科但学校自己努力变成本科了orz</p>
+          <p class="mt-1 font-semibold">GPA：3.8/4.0（成绩排名：1%~5%）</p>
+        </div>
+
+        <!-- 技能熟练度 -->
+        <h2 class="title-cute mt-8">
+          <i class="fas fa-star"></i>技能熟练度
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium">C语言</span>
+              <span>精通</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="bg-primary h-2.5 rounded-full" style="width: 95%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium">Word/PPT</span>
+              <span>精通</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="bg-primary h-2.5 rounded-full" style="width: 95%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium">Python/JavaScript</span>
+              <span>熟练</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="bg-secondary h-2.5 rounded-full" style="width: 85%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium">Excel/Access/PR</span>
+              <span>熟练</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="bg-secondary h-2.5 rounded-full" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 资格证书 -->
+        <h2 class="title-cute mt-8">
+          <i class="fas fa-certificate"></i>资格证书
+        </h2>
+        <div class="space-y-3">
+          <div class="item-cute">
+            <h3 class="font-bold">CET英语四级</h3>
+            <p class="text-sm text-gray-600">2024.06 | 永久有效</p>
+          </div>
+          <div class="item-cute">
+            <h3 class="font-bold">华为HCIA-AI人工智能专业证书</h3>
+            <p class="text-sm text-gray-600">2023.03 - 2026.03</p>
+          </div>
+          <div class="item-cute">
+            <h3 class="font-bold">奥星贝斯数据库证书</h3>
+            <p class="text-sm text-gray-600">2022.10 | 永久有效</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧内容栏 (占2列) -->
+    <div class="md:col-span-2 space-y-8">
+      <!-- 竞赛奖项 -->
+      <div class="card-cute relative">
+        <div class="decor-purple"></div>
+        <h2 class="title-cute">
+          <i class="fas fa-trophy"></i>竞赛奖项
+        </h2>
+        <div class="bg-light rounded-xl p-4">
+          <h3 class="font-bold text-secondary text-lg mb-3">启明工作室 | 竞赛组员 (2025.01)</h3>
+          <ul class="list-disc list-inside space-y-2 pl-4">
+            <li>湖北省大学生信创大赛（省赛高职组）“普开数据”人工智能赛道 <span class="text-primary font-bold">金奖</span></li>
+            <li>网络安全校赛“黄鹤杯” <span class="text-primary font-bold">一等奖</span></li>
+            <li>大学生创业创新大赛 <span class="text-primary font-bold">三等奖</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 项目经历 -->
+      <div class="card-cute relative">
+        <div class="decor-cute"></div>
+        <h2 class="title-cute">
+          <i class="fas fa-project-diagram"></i>项目经历
+        </h2>
+
+        <!-- 项目1：办公自动化解决方案 -->
+        <div class="mb-6 bg-light rounded-xl p-4 hover:shadow-sm transition-all">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-secondary text-lg">办公自动化解决方案实施项目</h3>
+            <span class="text-sm bg-primary/20 text-primary px-2 py-1 rounded-full">2024.03 - 2024.06</span>
+          </div>
+          <p class="text-gray-600 mb-3">针对企业内部办公流程繁琐、信息流转不畅问题，负责实施办公自动化解决方案，优化办公流程，提高办公协同效率。</p>
+          <h4 class="font-bold mb-2">✅ 职责描述：</h4>
+          <ul class="list-disc list-inside space-y-1 pl-4 mb-3">
+            <li>利用Excel高级功能重构财务预算编制流程，实现数据自动汇总、计算与分析，大幅缩短编制周期。</li>
+            <li>通过Word模板设计+宏功能，统一公司文档格式，开发自动生成功能，提升文档制作效率。</li>
+            <li>用PowerPoint制作标准化汇报模板，结合VBA实现内容自动更新与图表动态生成，优化汇报效果。</li>
+            <li>基于Access开发小型办公数据库，实现公司数据集中管理，提升数据查找效率。</li>
+          </ul>
+          <h4 class="font-bold mb-2">🎯 项目成果：</h4>
+          <p>公司整体办公效率显著提升，各部门信息共享流畅度大幅改善，打造了高效的企业办公环境。</p>
+        </div>
+
+        <!-- 项目2：仙鹤楼文化旅游风景区规划 -->
+        <div class="bg-light rounded-xl p-4 hover:shadow-sm transition-all">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-secondary text-lg">仙鹤楼文化旅游风景区规划可行报告</h3>
+            <span class="text-sm bg-primary/20 text-primary px-2 py-1 rounded-full">2025.01</span>
+          </div>
+          <p class="text-gray-600 mb-3">助理编辑/项目设计，负责品牌推广与市场营销相关的创意设计及多媒体制作工作，通过视觉创意和影像展现产品与服务特色。</p>
+          <h4 class="font-bold mb-2">✅ 职责描述：</h4>
+          <ul class="list-disc list-inside space-y-1 pl-4 mb-3">
+            <li>运用CoreLDRAW完成品牌标志设计与升级，制作品牌衍生应用设计，全面提升品牌形象。</li>
+            <li>负责产品宣传图片精修与创意合成，为各渠道提供高质量视觉素材，促进销售转化。</li>
+            <li>通过Canvas/Procreate制作文化图文内容，用于新媒体运营，增强品牌用户粘性。</li>
+            <li>独立完成短视频策划、拍摄与剪辑（PR/剪映/必剪），制作多类型内容，带来大量潜在客户咨询与合作机会。</li>
+          </ul>
+          <h4 class="font-bold mb-2">🎯 项目成果：</h4>
+          <p>品牌曝光度和网站流量显著提升，有效助力公司市场拓展与业务增长，为文旅项目打造了鲜明的视觉品牌。</p>
+        </div>
+      </div>
+
+      <!-- 求职意向 -->
+      <div class="card-cute relative">
+        <div class="decor-purple"></div>
+        <h2 class="title-cute">
+          <i class="fas fa-bullseye"></i>求职意向
+        </h2>
+        <div class="bg-light rounded-xl p-6 text-center">
+          <p class="text-xl text-secondary font-bold mb-4">计算机应用/人工智能相关岗位</p>
+          <p class="text-gray-600 mb-6">依托计算机应用技术专业知识、人工智能相关证书及项目实操经验，寻求人工智能开发、办公自动化开发、多媒体设计/数据处理等相关岗位，愿将专业能力转化为企业价值，持续学习与成长。</p>
+          <button class="bg-primary text-white px-6 py-3 rounded-full font-bold shadow-cute hover:bg-primary/80 transition-all flex items-center gap-2 mx-auto">
+            <i class="fas fa-paper-plane"></i> 投递简历
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部卡通装饰 -->
+  <div class="w-full mt-12 flex justify-center">
+    <div class="flex gap-4">
+      <div class="w-8 h-8 bg-primary rounded-full"></div>
+      <div class="w-10 h-10 bg-secondary rounded-full"></div>
+      <div class="w-8 h-8 bg-primary rounded-full"></div>
+    </div>
+  </div>
+
+  <!-- 回到顶部按钮 -->
+  <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-cute opacity-0 transition-opacity duration-300">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // 回到顶部功能
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.style.opacity = '1';
+      } else {
+        backToTop.style.opacity = '0';
+      }
+    });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 页面加载动画
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('opacity-100');
+      document.body.classList.remove('opacity-0');
+    });
+  </script>
+</body>
+</html>
