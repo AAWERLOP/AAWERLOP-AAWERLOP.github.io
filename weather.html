@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>天气预报</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#7FB2F0',
+            secondary: '#A7D8F0',
+            dark: '#2d3748',
+          },
+          fontFamily: {
+            aero: ['Segoe UI', 'Microsoft YaHei', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .win7-glass {
+        @apply bg-white/20 backdrop-blur-xl border border-white/40 shadow-lg rounded-xl;
+      }
+      .win7-aero-bg {
+        background: linear-gradient(-45deg, #e0f4ff, #b3e0ff, #cce7ff, #e0f4ff);
+        background-size: 400% 400%;
+        animation: gradientFlow 20s ease infinite;
+        background-attachment: fixed;
+      }
+      .win7-title {
+        @apply text-[#1e3a6a] font-bold drop-shadow-sm;
+      }
+      .win7-card {
+        @apply win7-glass p-6 transition-all duration-300 hover:bg-white/30;
+      }
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+
+<body class="win7-aero-bg min-h-screen font-aero text-dark relative">
+  <div class="container mx-auto px-4 py-10">
+    <div class="mb-6">
+      <a href="index.html" class="inline-block win7-glass px-4 py-2 text-primary">← 返回首页</a>
+    </div>
+
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-bold win7-title"><i class="fa-solid fa-cloud-sun"></i> 天气预报</h1>
+      <p class="mt-2 text-gray-600">实时天气查询</p>
+    </div>
+
+    <div class="max-w-xl mx-auto mb-8">
+      <div class="flex gap-2">
+        <input id="city" type="text" placeholder="输入城市：北京、上海、广州等"
+          class="flex-1 win7-glass px-4 py-3 outline-none text-dark">
+        <button id="searchBtn" class="win7-glass px-5 py-3 bg-primary/60 text-white font-bold hover:bg-primary/80">
+          查询
+        </button>
+      </div>
+    </div>
+
+    <div id="card" class="max-w-xl mx-auto win7-card hidden">
+      <div class="text-center">
+        <h2 id="cityName" class="text-2xl win7-title"></h2>
+        <div class="my-4"><i id="icon" class="fa-solid fa-5x text-primary"></i></div>
+        <p id="temp" class="text-5xl font-bold text-[#1e3a6a]"></p>
+        <p id="info" class="text-xl mt-2 text-gray-700"></p>
+      </div>
+    </div>
+
+    <div id="tip" class="text-center text-gray-500 mt-6">请输入城市查询</div>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    $('searchBtn').onclick = query;
+    $('city').onkeypress = e => e.key === 'Enter' && query();
+
+    async function query() {
+      const city = $('city').value.trim();
+      if (!city) return alert('请输入城市');
+      $('tip').textContent = '加载中...';
+      $('card').classList.add('hidden');
+
+      try {
+        const r = await fetch(`https://api.vvhan.com/api/weather?city=${encodeURIComponent(city)}`);
+        const d = await r.json();
+        if (d.success !== true) throw new Error();
+
+        $('cityName').textContent = d.city;
+        $('temp').textContent = d.temp + '°C';
+        $('info').textContent = d.weather + ' | ' + d.wind + ' | 湿度 ' + d.humidity;
+
+        const i = d.weather;
+        if (i.includes('晴')) $('icon').className = 'fa-solid fa-sun text-yellow-400 fa-5x';
+        else if (i.includes('云') || i.includes('阴')) $('icon').className = 'fa-solid fa-cloud fa-5x text-gray-400';
+        else if (i.includes('雨')) $('icon').className = 'fa-solid fa-cloud-rain fa-5x text-blue-400';
+        else if (i.includes('雪')) $('icon').className = 'fa-solid fa-snowflake fa-5x text-blue-200';
+        else $('icon').className = 'fa-solid fa-cloud-sun text-primary fa-5x';
+
+        $('card').classList.remove('hidden');
+        $('tip').style.display = 'none';
+      } catch (e) {
+        $('tip').textContent = '查询失败，请重试';
+      }
+    }
+  </script>
+</body>
+</html>
