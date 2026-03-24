@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科学计算器</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#7FB2F0',
+          secondary: '#A7D8F0',
+        },
+        fontFamily: {
+          aero: ['Segoe UI', 'Microsoft YaHei', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { 
+  display: flex; justify-content: center; align-items: center; 
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #e0f4ff, #b3e0ff, #cce7ff, #e0f4ff);
+  background-size: 400% 400%;
+  animation: gradientFlow 20s ease infinite;
+  padding: 10px;
+}
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.casio { 
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.3);
+  width: 380px;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+}
+
+.screen { 
+  background: rgba(255,255,255,0.6);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  height: 120px;
+  overflow: hidden;
+}
+#history { 
+  font-size: 16px; color: #333; text-align: right; 
+  min-height: 24px; word-break: break-all;
+}
+#display { 
+  font-size: 42px; text-align: right; border: none; 
+  background: transparent; width: 100%; outline: none; 
+  margin-top: 5px; color: #1e3a6a; font-weight: 600;
+}
+
+.mode-bar { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.mode-btn { 
+  flex: 1; padding: 6px 0; border-radius: 8px; border: none; 
+  background: rgba(255,255,255,0.3); color: #1e3a6a;
+  font-size: 14px; cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+.mode-btn.active { background: #7FB2F0; color: white; }
+
+.memory { display: flex; gap: 8px; margin-bottom: 10px; }
+.mem-btn { 
+  flex: 1; padding: 6px 0; border-radius: 8px; border: none; 
+  background: rgba(255,255,255,0.4); color: #1e3a6a;
+  font-size: 14px; cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.buttons { 
+  display: grid; grid-template-columns: repeat(5, 1fr); 
+  gap: 8px;
+}
+
+button { 
+  height: 50px; border: none; border-radius: 10px; 
+  font-size: 16px; font-weight: 500; cursor: pointer; 
+  transition: all 0.15s ease;
+  backdrop-filter: blur(6px);
+}
+button:hover { opacity: 0.9; transform: scale(0.96); }
+
+.btn-num { background: rgba(255,255,255,0.5); color: #1e3a6a; }
+.btn-op { background: rgba(127,178,240,0.4); color: #1e3a6a; }
+.btn-sci { background: rgba(127,178,240,0.6); color: white; }
+.btn-func { background: rgba(255,120,120,0.6); color: white; }
+.btn-base { background: rgba(120,200,150,0.5); color: white; }
+.btn-equal { background: #7FB2F0; color: white; grid-column: span 2; }
+
+.base-box { margin-top: 15px; color: #1e3a6a; font-size: 14px; }
+.base-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: center; }
+.base-row input { 
+  flex: 1; padding: 8px; border-radius: 8px; border: none; 
+  background: rgba(255,255,255,0.4); color: #1e3a6a;
+  text-align: right; font-size: 14px;
+  backdrop-filter: blur(4px);
+}
+
+.stat-modal { 
+  display: none; position: fixed; top: 0; left: 0; width: 100%; 
+  height: 100%; background: rgba(0,0,0,0.3); 
+  justify-content: center; align-items: center; z-index: 100;
+  backdrop-filter: blur(4px);
+}
+.stat-content { 
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(12px);
+  padding: 20px; border-radius: 12px; 
+  width: 90%; max-width: 350px; color: #1e3a6a;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.stat-title { font-size: 18px; margin-bottom: 15px; text-align: center; font-weight: bold; }
+.stat-item { margin: 10px 0; font-size: 16px; }
+.stat-close { 
+  margin-top: 20px; width: 100%; padding: 10px; 
+  background: #7FB2F0; border: none; color: #fff; 
+  border-radius: 10px; cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<a href="index.html" style="position:fixed;top:20px;left:20px;z-index:99;background:rgba(255,255,255,0.4);backdrop-filter:blur(6px);padding:10px 16px;border-radius:12px;text-decoration:none;color:#1e3a6a;font-weight:bold;">← 返回首页</a>
+
+<div class="casio">
+  <div class="screen">
+    <div id="history"></div>
+    <input type="text" id="display" readonly>
+  </div>
+
+  <div class="mode-bar">
+    <button class="mode-btn active" onclick="setMode('deg')">DEG</button>
+    <button class="mode-btn" onclick="setMode('rad')">RAD</button>
+    <button class="mode-btn" onclick="setMode('gra')">GRA</button>
+    <button class="mode-btn" onclick="setFixMode()">FIX</button>
+  </div>
+
+  <div class="memory">
+    <button class="mem-btn" onclick="mc()">MC</button>
+    <button class="mem-btn" onclick="mr()">MR</button>
+    <button class="mem-btn" onclick="mPlus()">M+</button>
+    <button class="mem-btn" onclick="mMinus()">M-</button>
+  </div>
+
+  <div class="buttons">
+    <button class="btn-sci" onclick="insert('Math.sin(')">sin</button>
+    <button class="btn-sci" onclick="insert('Math.cos(')">cos</button>
+    <button class="btn-sci" onclick="insert('Math.tan(')">tan</button>
+    <button class="btn-sci" onclick="insert('Math.log10(')">log</button>
+    <button class="btn-sci" onclick="insert('Math.log(')">ln</button>
+
+    <button class="btn-sci" onclick="insert('Math.asin(')">sin⁻¹</button>
+    <button class="btn-sci" onclick="insert('Math.acos(')">cos⁻¹</button>
+    <button class="btn-sci" onclick="insert('Math.atan(')">tan⁻¹</button>
+    <button class="btn-sci" onclick="insert('10**')">10ˣ</button>
+    <button class="btn-sci" onclick="insert('Math.exp(')">eˣ</button>
+
+    <button class="btn-sci" onclick="insert('Math.sinh(')">sinh</button>
+    <button class="btn-sci" onclick="insert('Math.cosh(')">cosh</button>
+    <button class="btn-sci" onclick="insert('Math.tanh(')">tanh</button>
+    <button class="btn-sci" onclick="x2()">x²</button>
+    <button class="btn-sci" onclick="x3()">x³</button>
+
+    <button class="btn-func" onclick="clearAll()">AC</button>
+    <button class="btn-func" onclick="del()">DEL</button>
+    <button class="btn-op" onclick="insert('(')"> ( </button>
+    <button class="btn-op" onclick="insert(')')"> ) </button>
+    <button class="btn-op" onclick="insert('/')">÷</button>
+
+    <button class="btn-num" onclick="insert('7')">7</button>
+    <button class="btn-num" onclick="insert('8')">8</button>
+    <button class="btn-num" onclick="insert('9')">9</button>
+    <button class="btn-op" onclick="insert('*')">×</button>
+    <button class="btn-op" onclick="insert('-')">−</button>
+
+    <button class="btn-num" onclick="insert('4')">4</button>
+    <button class="btn-num" onclick="insert('5')">5</button>
+    <button class="btn-num" onclick="insert('6')">6</button>
+    <button class="btn-op" onclick="insert('+')">+</button>
+    <!-- 👉 这里新增 C 按钮：只清空当前行 -->
+    <button class="btn-func" onclick="clearCurrent()">C</button>
+
+    <button class="btn-num" onclick="insert('1')">1</button>
+    <button class="btn-num" onclick="insert('2')">2</button>
+    <button class="btn-num" onclick="insert('3')">3</button>
+    <button class="btn-num" onclick="insert('0')">0</button>
+    <button class="btn-num" onclick="insert('.')">.</button>
+
+    <button class="btn-base" onclick="insert(Math.PI)">π</button>
+    <button class="btn-base" onclick="insert(Math.E)">e</button>
+    <button class="btn-sci" onclick="fact()">x!</button>
+    <button class="btn-sci" onclick="inv()">1/x</button>
+    <button class="btn-sci" onclick="sqrt()">√</button>
+    
+    <button class="btn-equal" onclick="calcEqual()">=</button>
+    <button class="btn-base" onclick="openStatMode()" style="grid-column: span 4; background: rgba(125,91,190,0.7); color:white;">📊 统计模式(Σ)</button>
+  </div>
+
+  <div class="base-box">
+    <div class="base-row">
+      <label style="width:60px;">十进制:</label>
+      <input type="text" id="dec" oninput="fromDec()">
+    </div>
+    <div class="base-row">
+      <label style="width:60px;">二进制:</label>
+      <input type="text" id="bin" oninput="fromBin()">
+    </div>
+    <div class="base-row">
+      <label style="width:60px;">八进制:</label>
+      <input type="text" id="oct" oninput="fromOct()">
+    </div>
+    <div class="base-row">
+      <label style="width:60px;">十六进制:</label>
+      <input type="text" id="hex" oninput="fromHex()">
+    </div>
+  </div>
+</div>
+
+<div class="stat-modal" id="statModal">
+  <div class="stat-content">
+    <div class="stat-title">📊 统计计算结果</div>
+    <div class="stat-item">数据总数: <span id="statN">0</span></div>
+    <div class="stat-item">总和 (Σx): <span id="statSum">0</span></div>
+    <div class="stat-item">平均值 (x̄): <span id="statAvg">0</span></div>
+    <div class="stat-item">总体标准差 (σ): <span id="statStd">0</span></div>
+    <div class="stat-item">样本标准差 (S): <span id="statStdS">0</span></div>
+    <button class="stat-close" onclick="closeStatMode()">关闭</button>
+  </div>
+</div>
+
+<script>
+const display = document.getElementById('display');
+const history = document.getElementById('history');
+const statModal = document.getElementById('statModal');
+let angleMode = 'deg';
+let fixMode = false;
+let fixDigits = 2;
+let memoryVal = 0;
+let statData = [];
+
+function insert(value) { display.value += value; }
+
+// 清空当前行（C按钮）
+function clearCurrent() {
+  display.value = '';
+}
+
+function clearAll() { display.value = ''; history.textContent = ''; statData = []; closeStatMode(); }
+function del() { display.value = display.value.slice(0,-1); }
+
+function setMode(mode) {
+  angleMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function setFixMode() {
+  if(!fixMode){ fixMode=true; fixDigits=1; alert(`FIX ${fixDigits} 位小数`); }
+  else { fixDigits++; if(fixDigits>3){ fixMode=false; fixDigits=2; alert('关闭FIX'); } else alert(`FIX ${fixDigits} 位小数`); }
+  document.querySelectorAll('.mode-btn').forEach(b=>{ if(b.textContent=='FIX') b.classList.toggle('active',fixMode); });
+}
+
+function formatNumber(num) { return fixMode ? num.toFixed(fixDigits) : num.toString(); }
+
+function sqrt() { insert('Math.sqrt('); }
+function x2() { insert('**2'); }
+function x3() { insert('**3'); }
+function inv() { insert('1/'); }
+
+function fact() {
+  try{
+    let n=Math.round(eval(display.value));
+    if(n<0||n>20){display.value='错误';return;}
+    let f=1;for(let i=1;i<=n;i++)f*=i;display.value=f;
+  }catch(e){display.value='错误';}
+}
+
+function mc() { memoryVal=0; }
+function mr() { display.value+=memoryVal; }
+function mPlus() { try{memoryVal+=eval(display.value);}catch(e){} }
+function mMinus() { try{memoryVal-=eval(display.value);}catch(e){} }
+
+function calcEqual() {
+  try{
+    let expr=display.value.replace(/×/g,'*').replace(/÷/g,'/');
+    let res=eval(expr);
+    history.textContent=display.value;
+    display.value=formatNumber(res);
+  }catch(e){display.value='错误';}
+}
+
+function openStatMode() { statModal.style.display='flex'; updateStat(); }
+function closeStatMode() { statModal.style.display='none'; }
+function addStat() { try{statData.push(parseFloat(display.value)); display.value='';}catch(e){} }
+
+function updateStat() {
+  const n=statData.length;
+  if(n===0){document.getElementById('statN').textContent=0;document.getElementById('statSum').textContent=0;document.getElementById('statAvg').textContent=0;document.getElementById('statStd').textContent=0;document.getElementById('statStdS').textContent=0;return;}
+  const sum=statData.reduce((a,b)=>a+b,0);
+  const avg=sum/n;
+  const sq=statData.map(x=>(x-avg)**2);
+  const v=sq.reduce((a,b)=>a+b,0)/n;
+  const vs=sq.reduce((a,b)=>a+b,0)/(n-1)||0;
+  const s=Math.sqrt(v);
+  const ss=Math.sqrt(vs);
+  document.getElementById('statN').textContent=n;
+  document.getElementById('statSum').textContent=formatNumber(sum);
+  document.getElementById('statAvg').textContent=formatNumber(avg);
+  document.getElementById('statStd').textContent=formatNumber(s);
+  document.getElementById('statStdS').textContent=formatNumber(ss);
+}
+
+function fromDec() {
+  const v=document.getElementById('dec').value;
+  if(!/^\d*$/.test(v))return;
+  const n=parseInt(v||0);
+  document.getElementById('bin').value=n.toString(2);
+  document.getElementById('oct').value=n.toString(8);
+  document.getElementById('hex').value=n.toString(16).toUpperCase();
+}
+function fromBin() {
+  const v=document.getElementById('bin').value;
+  if(!/^[01]*$/.test(v))return;
+  const n=parseInt(v||0,2);
+  document.getElementById('dec').value=n;
+  document.getElementById('oct').value=n.toString(8);
+  document.getElementById('hex').value=n.toString(16).toUpperCase();
+}
+function fromOct() {
+  const v=document.getElementById('oct').value;
+  if(!/^[0-7]*$/.test(v))return;
+  const n=parseInt(v||0,8);
+  document.getElementById('dec').value=n;
+  document.getElementById('bin').value=n.toString(2);
+  document.getElementById('hex').value=n.toString(16).toUpperCase();
+}
+function fromHex() {
+  const v=document.getElementById('hex').value;
+  if(!/^[0-9A-Fa-f]*$/.test(v))return;
+  const n=parseInt(v||0,16);
+  document.getElementById('dec').value=n;
+  document.getElementById('bin').value=n.toString(2);
+  document.getElementById('oct').value=n.toString(8);
+}
+</script>
+</body>
+</html>
