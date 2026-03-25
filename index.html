@@ -61,83 +61,220 @@
     @keyframes ripple-animation {
       to { transform: scale(4); opacity: 0; }
     }
+
+    /* 对齐后的时间部件：和左侧个人信息列对齐，样式统一 */
+    .ios-time-widget {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #1e3a6a;
+      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+    .ios-time-widget .date {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+    .ios-time-widget .time {
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
   </style>
 </head>
 
 <body class="win7-aero-bg min-h-screen font-aero text-dark relative overflow-x-hidden">
 
-<div class="relative z-10 w-full py-6 flex justify-center items-center">
-  <div class="win7-glass px-6 py-3 flex items-center gap-3">
-    <div class="w-12 h-12 bg-primary/30 backdrop-blur rounded-full flex items-center justify-center text-white text-2xl">
-      <i class="fas fa-user"></i>
+<div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 py-6">
+  <!-- 左侧：时间部件 + 个人信息 + 教育 + 技能 + 证书 -->
+  <div class="md:col-span-1 space-y-6">
+    <!-- 👉 时间部件：现在和左侧列完全对齐，样式统一 -->
+    <div class="ios-time-widget">
+      <div class="date" id="iosDate">3月25日周三 · 丙午年二月初七</div>
+      <div class="time" id="iosTime">11:58</div>
     </div>
-    <h1 class="text-3xl md:text-4xl font-bold win7-title">樱羽巧可</h1>
-  </div>
-</div>
 
-<div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 pb-20">
-  <div class="md:col-span-1">
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-id-card-alt"></i>个人信息</h2>
       <ul class="space-y-3">
         <li class="flex items-center gap-3"><i class="fas fa-venus text-primary"></i><span>性别：女</span></li>
         <li class="flex items-center gap-3"><i class="fas fa-birthday-cake text-primary"></i><span>年龄：21岁</span></li>
         <li class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-primary"></i><span>居住地：湖北宜昌</span></li>
-        <li class="flex items-center gap-3"><i class="fas fa-phone text-primary"></i><span>电话：1812035181</span></li>
+        <li class="flex items-center gap-3"><i class="fas fa-phone text-primary"></i><span>电话：18120354815</span></li>
         <li class="flex items-center gap-3"><i class="fas fa-envelope text-primary"></i><span>邮箱：2684724974@qq.com</span></li>
-        <li class="flex items-center gap-3"><i class="fas fa-user-graduate text-primary"></i><span>身份：待业中</span></li>
+        <li class="flex items-center gap-3"><i class="fas fa-user-graduate text-primary"></i><span>身份：家里蹲（待业中）</span></li>
       </ul>
 
       <h2 class="win7-title text-2xl mt-8 mb-4 flex items-center gap-2"><i class="fas fa-graduation-cap"></i>教育背景</h2>
       <div class="win7-item">
         <h3 class="font-bold text-[#1e3a6a] text-lg">武汉职业技术学院</h3>
         <p class="text-sm text-gray-700">2021.09 - 2025.06</p>
-        <p>人工智能学院｜计算机应用技术</p>
-        <p class="mt-1 font-semibold">GPA：3.8/4.0</p>
+        <p>人工智能学院 | 计算机应用技术 | 虽然是专科但学校自己努力变成本科了orz</p>
+        <p class="mt-1 font-semibold">GPA：3.8/4.0（成绩排名：1%~5%）</p>
       </div>
 
       <h2 class="win7-title text-2xl mt-8 mb-4 flex items-center gap-2"><i class="fas fa-star"></i>技能熟练度</h2>
       <div class="space-y-4">
-        <div><div class="flex justify-between mb-1"><span>C语言</span><span>精通</span></div><div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-primary h-2.5 rounded-full" style="width:95%"></div></div></div>
-        <div><div class="flex justify-between mb-1"><span>Word/PPT</span><span>精通</span></div><div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-primary h-2.5 rounded-full" style="width:95%"></div></div></div>
-        <div><div class="flex justify-between mb-1"><span>Python/JS</span><span>熟练</span></div><div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-secondary h-2.5 rounded-full" style="width:85%"></div></div></div>
-        <div><div class="flex justify-between mb-1"><span>Excel/Access/PR</span><span>熟练</span></div><div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-secondary h-2.5 rounded-full" style="width:85%"></div></div></div>
+        <div>
+          <div class="flex justify-between mb-1"><span>C语言</span><span>精通</span></div>
+          <div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-primary h-2.5 rounded-full" style="width:95%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1"><span>Word/PPT</span><span>精通</span></div>
+          <div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-primary h-2.5 rounded-full" style="width:95%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1"><span>Python/JavaScript</span><span>熟练</span></div>
+          <div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-secondary h-2.5 rounded-full" style="width:85%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1"><span>Excel/Access/PR</span><span>熟练</span></div>
+          <div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-secondary h-2.5 rounded-full" style="width:85%"></div></div>
+        </div>
       </div>
 
-      <h2 class="win7-title text-2xl mt-8 mb-4 flex items-center gap-2"><i class="fas fa-certificate"></i>证书</h2>
+      <h2 class="win7-title text-2xl mt-8 mb-4 flex items-center gap-2"><i class="fas fa-certificate"></i>资格证书</h2>
       <div class="space-y-3">
-        <div class="win7-item"><h3 class="font-bold">CET英语四级</h3></div>
-        <div class="win7-item"><h3 class="font-bold">HCIA-AI人工智能</h3></div>
-        <div class="win7-item"><h3 class="font-bold">数据库证书</h3></div>
+        <div class="win7-item">
+          <h3 class="font-bold">CET英语四级</h3>
+          <p class="text-sm text-gray-700">2024.06 | 永久有效</p>
+        </div>
+        <div class="win7-item">
+          <h3 class="font-bold">华为HCIA-AI人工智能专业证书</h3>
+          <p class="text-sm text-gray-700">2023.03 - 2026.03</p>
+        </div>
+        <div class="win7-item">
+          <h3 class="font-bold">奥星贝斯数据库证书</h3>
+          <p class="text-sm text-gray-700">2022.10 | 永久有效</p>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- 右侧：名字卡片 + 竞赛 + 项目 + 求职意向 + 工具箱 -->
   <div class="md:col-span-2 space-y-6">
+    <!-- 名字卡片 -->
+    <div class="win7-glass px-6 py-3 flex items-center gap-3 justify-center">
+      <div class="w-12 h-12 bg-primary/30 backdrop-blur rounded-full flex items-center justify-center text-white text-2xl">
+        <i class="fas fa-user"></i>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold win7-title">樱羽巧可</h1>
+    </div>
+
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-trophy"></i>竞赛奖项</h2>
       <div class="bg-white/10 backdrop-blur p-4 rounded-lg">
-        <li>湖北省信创大赛人工智能赛道 金奖</li>
-        <li>校网络安全大赛 一等奖</li>
-        <li>大学生创新大赛 三等奖</li>
+        <h3 class="font-bold text-[#1e3a6a] text-lg mb-3">启明工作室 | 竞赛组员 (2025.01)</h3>
+        <ul class="list-disc list-inside space-y-2 pl-4">
+          <li>湖北省大学生信创大赛（省赛高职组）“普开数据”人工智能赛道 <b>金奖</b></li>
+          <li>网络安全校赛“黄鹤杯” <b>一等奖</b></li>
+          <li>大学生创业创新大赛 <b>三等奖</b></li>
+        </ul>
       </div>
     </div>
 
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-project-diagram"></i>项目经历</h2>
-      <div class="space-y-3">
-        <p>• 办公自动化系统（Excel+VBA+Access）</p>
-        <p>• 文旅品牌视觉设计与宣传视频</p>
-        <p>• AI简历智能分析与匹配系统</p>
-        <p>• 个人博客网站（前端+毛玻璃特效）</p>
-        <p>• C语言学生信息管理系统</p>
+      
+      <!-- 项目1：办公自动化 -->
+      <div class="bg-white/10 backdrop-blur p-4 rounded-lg mb-4">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-[#1e3a6a] text-lg">办公自动化解决方案实施项目</h3>
+          <span class="text-sm bg-primary/20 px-2 py-1 rounded-full">2024.03-2024.06</span>
+        </div>
+        <p class="text-gray-700 mb-2">针对企业内部办公流程繁琐、信息流转不畅问题，负责实施办公自动化解决方案，优化办公流程，提高办公协同效率。</p>
+        <h4 class="font-bold mb-1">✅ 职责描述：</h4>
+        <ul class="list-disc list-inside space-y-1 pl-4 mb-2">
+          <li>利用Excel高级功能重构财务预算编制流程，实现数据自动汇总、计算与分析，大幅缩短编制周期。</li>
+          <li>通过Word模板设计+宏功能，统一公司文档格式，开发自动生成功能，提升文档制作效率。</li>
+          <li>用PowerPoint制作标准化汇报模板，结合VBA实现内容自动更新与图表动态生成。</li>
+          <li>基于Access开发小型办公数据库，实现公司数据集中管理，提升数据查找效率。</li>
+        </ul>
+        <h4 class="font-bold mb-1">🎯 项目成果：</h4>
+        <p>公司整体办公效率显著提升，各部门信息共享流畅度大幅改善，打造了高效的企业办公环境。</p>
+      </div>
+
+      <!-- 项目2：仙鹤楼文旅 -->
+      <div class="bg-white/10 backdrop-blur p-4 rounded-lg mb-4">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-[#1e3a6a] text-lg">仙鹤楼文化旅游风景区规划可行报告</h3>
+          <span class="text-sm bg-primary/20 px-2 py-1 rounded-full">2025.01</span>
+        </div>
+        <p class="text-gray-700 mb-2">助理编辑/项目设计，负责品牌推广与市场营销相关的创意设计及多媒体制作工作，通过视觉创意和影像展现产品与服务特色。</p>
+        <h4 class="font-bold mb-1">✅ 职责描述：</h4>
+        <ul class="list-disc list-inside space-y-1 pl-4 mb-2">
+          <li>运用CoreLDRAW完成品牌标志设计与升级，制作品牌衍生应用设计，全面提升品牌形象。</li>
+          <li>负责产品宣传图片精修与创意合成，为各渠道提供高质量视觉素材，促进销售转化。</li>
+          <li>通过Canvas/Procreate制作文化图文内容，用于新媒体运营，增强品牌用户粘性。</li>
+          <li>独立完成短视频策划、拍摄与剪辑（PR/剪映/必剪），制作多类型内容，带来大量潜在客户咨询与合作机会。</li>
+        </ul>
+        <h4 class="font-bold mb-1">🎯 项目成果：</h4>
+        <p>品牌曝光度和网站流量显著提升，有效助力公司市场拓展与业务增长，为文旅项目打造了鲜明的视觉品牌。</p>
+      </div>
+
+      <!-- 项目3：AI简历分析 -->
+      <div class="bg-white/10 backdrop-blur p-4 rounded-lg mb-4">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-[#1e3a6a] text-lg">AI简历智能分析与匹配系统</h3>
+          <span class="text-sm bg-primary/20 px-2 py-1 rounded-full">2024.09-2024.12</span>
+        </div>
+        <p class="text-gray-700 mb-2">基于Python与机器学习，实现简历自动解析、技能提取、岗位智能匹配，用于校园招聘辅助工具。</p>
+        <ul class="list-disc list-inside space-y-1 pl-4">
+          <li>使用Python爬虫抓取招聘网站JD，构建岗位需求关键词库</li>
+          <li>通过PDF/Word解析库自动抽取简历信息，结构化存储</li>
+          <li>使用TF-IDF与相似度算法实现简历—岗位智能匹配</li>
+          <li>使用Flask搭建Web界面，支持上传简历一键生成分析报告</li>
+        </ul>
+        <p class="mt-1"><b>成果：</b>可快速筛选简历，效率提升80%，已用于校内模拟招聘场景。</p>
+      </div>
+
+      <!-- 项目4：个人博客 -->
+      <div class="bg-white/10 backdrop-blur p-4 rounded-lg mb-4">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-[#1e3a6a] text-lg">个人前端博客与作品集网站</h3>
+          <span class="text-sm bg-primary/20 px-2 py-1 rounded-full">2024.07-2024.08</span>
+        </div>
+        <p class="text-gray-700 mb-2">使用HTML、CSS、JavaScript、Tailwind CSS开发响应式博客，含动态效果、项目展示、留言功能。</p>
+        <ul class="list-disc list-inside space-y-1 pl-4">
+          <li>实现毛玻璃、渐变、Aero风格UI设计</li>
+          <li>添加鼠标拖尾、滚动动画、暗黑模式切换</li>
+          <li>适配PC/手机，完成响应式布局</li>
+          <li>部署至GitHub Pages，可在线访问</li>
+        </ul>
+        <p class="mt-1"><b>成果：</b>作为个人技术名片，用于求职展示，提升面试通过率。</p>
+      </div>
+
+      <!-- 项目5：学生管理系统 -->
+      <div class="bg-white/10 backdrop-blur p-4 rounded-lg">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-[#1e3a6a] text-lg">学生信息管理系统（C语言+数据库）</h3>
+          <span class="text-sm bg-primary/20 px-2 py-1 rounded-full">2023.09-2024.01</span>
+        </div>
+        <p class="text-gray-700 mb-2">控制台版学生管理系统，使用C语言实现数据增删改查、文件存储、成绩排序、统计分析。</p>
+        <ul class="list-disc list-inside space-y-1 pl-4">
+          <li>使用结构体、链表、文件操作完成数据持久化</li>
+          <li>实现成绩排序、查找、统计、分页展示</li>
+          <li>菜单交互清晰，支持批量导入导出</li>
+          <li>代码规范，注释完整，可直接用于课程设计</li>
+        </ul>
+        <p class="mt-1"><b>成果：</b>课程设计满分，被班级同学作为参考模板使用。</p>
       </div>
     </div>
 
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-bullseye"></i>求职意向</h2>
-      <p class="mb-3">计算机应用、人工智能、前端开发、软件测试</p>
-      <p>愿意持续学习，踏实负责，快速上手业务。</p>
+      <div class="bg-white/10 backdrop-blur p-6 rounded-lg text-center">
+        <p class="text-xl text-[#1e3a6a] font-bold mb-4">计算机应用/人工智能相关岗位</p>
+        <p class="text-gray-700 mb-6">依托计算机应用技术专业知识、人工智能相关证书及项目实操经验，寻求人工智能开发、办公自动化开发、多媒体设计/数据处理等相关岗位，愿将专业能力转化为企业价值，持续学习与成长。</p>
+        <button class="bg-primary/60 hover:bg-primary/80 backdrop-blur text-white px-6 py-3 rounded-full font-bold transition-all mx-auto">
+          <i class="fas fa-paper-plane"></i> 投递简历
+        </button>
+      </div>
     </div>
 
     <!-- 🧰 工具箱 -->
@@ -159,11 +296,13 @@
   </div>
 </div>
 
+<!-- 悬浮回到顶部按钮 -->
 <button id="backToTop" class="fixed bottom-6 right-6 win7-glass w-12 h-12 flex items-center justify-center text-primary opacity-0 transition-opacity">
   <i class="fas fa-arrow-up"></i>
 </button>
 
 <script>
+  // 回到顶部
   const btn = document.getElementById('backToTop');
   window.addEventListener('scroll',()=>{
     btn.style.opacity = window.scrollY>300 ? '1':'0';
@@ -172,6 +311,7 @@
     window.scrollTo({top:0,behavior:'smooth'});
   });
 
+  // 点击波纹
   document.addEventListener("click", (e) => {
     const r = document.createElement("div");
     r.classList.add("ripple");
@@ -181,6 +321,21 @@
     document.body.appendChild(r);
     setTimeout(()=>r.remove(),700);
   });
+
+  // iOS 时间部件 - 实时更新
+  function updateTime() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('iosTime').textContent = `${h}:${m}`;
+
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const week = ['日', '一', '二', '三', '四', '五', '六'][now.getDay()];
+    document.getElementById('iosDate').textContent = `${month}月${day}日周${week} · 丙午年二月初七`;
+  }
+  updateTime();
+  setInterval(updateTime, 60000);
 </script>
 
 </body>
