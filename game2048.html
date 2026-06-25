@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>2048 清新版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            touch-action: none;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #48a8a8;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* 顶部信息栏 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .score-box {
+            flex: 2;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            color: white;
+        }
+
+        .score-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .side-controls {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .best-score {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .best-score .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .best-score .value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 游戏网格面板 */
+        .game-board {
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            padding: 12px;
+            aspect-ratio: 1 / 1;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .grid-cell {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        /* 方块层 */
+        .tiles-layer {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            pointer-events: none;
+        }
+
+        .tile {
+            position: absolute;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.15s ease;
+        }
+
+        /* 低饱和度方块配色 */
+        .tile-2 { background-color: #d6f0f0; color: #2b6b6b; }
+        .tile-4 { background-color: #a8e0e6; color: #2b6b6b; }
+        .tile-8 { background-color: #62b8e0; }
+        .tile-16 { background-color: #4a9fdd; }
+        .tile-32 { background-color: #2577c7; }
+        .tile-64 { background-color: #1d5fa8; }
+        .tile-128 { background-color: #304fb8; font-size: 28px; }
+        .tile-256 { background-color: #5544b5; font-size: 28px; }
+        .tile-512 { background-color: #773eaf; font-size: 28px; }
+        .tile-1024 { background-color: #8e3aa5; font-size: 24px; }
+        .tile-2048 { background-color: #9f44a3; font-size: 24px; }
+        .tile-4096 { background-color: #ad529c; font-size: 24px; }
+        .tile-8192 { background-color: #b86494; font-size: 24px; }
+        .tile-super { background-color: #c0748e; font-size: 20px; }
+
+        /* 新方块出现动画 */
+        .tile-new {
+            animation: appear 0.2s ease;
+        }
+
+        @keyframes appear {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* 游戏结束遮罩 */
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(72, 168, 168, 0.75);
+            backdrop-filter: blur(4px);
+            border-radius: 16px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .game-overlay h2 {
+            color: white;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .game-overlay p {
+            color: rgba(255,255,255,0.95);
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .game-overlay .overlay-btn {
+            padding: 12px 36px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(8px);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .game-overlay .overlay-btn:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        /* 移动端字体适配 */
+        @media (max-width: 400px) {
+            .score-value {
+                font-size: 28px;
+            }
+            .tile {
+                font-size: 26px;
+            }
+            .tile-128, .tile-256, .tile-512 {
+                font-size: 22px;
+            }
+            .tile-1024, .tile-2048 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <div class="score-box">
+                <div class="score-label">当前分数</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div class="side-controls">
+                <div class="best-score">
+                    <div class="label">最高分</div>
+                    <div class="value" id="bestScore">0</div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn" id="undoBtn">撤回</button>
+                    <button class="btn" id="restartBtnTop">重开</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-board">
+            <div class="grid-container">
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div>
+            </div>
+            <div class="tiles-layer" id="tilesLayer"></div>
+
+            <div class="game-overlay" id="gameOverlay">
+                <h2>游戏结束</h2>
+                <p id="finalScore">最终得分：0</p>
+                <button class="overlay-btn" id="restartBtn">重新开始</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Game2048 {
+            constructor() {
+                this.gridSize = 4;
+                this.grid = [];
+                this.score = 0;
+                this.bestScore = parseInt(localStorage.getItem('2048_best')) || 0;
+                this.history = null;
+                this.isGameOver = false;
+                this.tilesLayer = document.getElementById('tilesLayer');
+                this.tileSize = 0;
+                this.gap = 12;
+
+                this.init();
+                this.bindEvents();
+                window.addEventListener('resize', () => this.render());
+            }
+
+            // 初始化游戏
+            init() {
+                this.grid = Array(this.gridSize).fill().map(() => Array(this.gridSize).fill(0));
+                this.score = 0;
+                this.isGameOver = false;
+                this.history = null;
+
+                this.addRandomTile();
+                this.addRandomTile();
+
+                this.updateScore();
+                this.render();
+                this.hideOverlay();
+            }
+
+            // 随机生成新方块
+            addRandomTile() {
+                const emptyCells = [];
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        if (this.grid[r][c] === 0) {
+                            emptyCells.push({r, c});
+                        }
+                    }
+                }
+                if (emptyCells.length === 0) return false;
+
+                const { r, c } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                this.grid[r][c] = Math.random() < 0.9 ? 2 : 4;
+                return { r, c };
+            }
+
+            // 保存历史状态用于撤回
+            saveHistory() {
+                this.history = {
+                    grid: this.grid.map(row => [...row]),
+                    score: this.score
+                };
+            }
+
+            // 撤回操作
+            undo() {
+                if (!this.history) return;
+                if (this.isGameOver) {
+                    this.isGameOver = false;
+                    this.hideOverlay();
+                }
+                this.grid = this.history.grid.map(row => [...row]);
+                this.score = this.history.score;
+                this.history = null;
+                this.updateScore();
+                this.render();
+            }
+
+            // 单行左移核心逻辑
+            slideRowLeft(row) {
+                let filtered = row.filter(val => val !== 0);
+                for (let i = 0; i < filtered.length - 1; i++) {
+                    if (filtered[i] === filtered[i + 1]) {
+                        filtered[i] *= 2;
+                        this.score += filtered[i];
+                        filtered[i + 1] = 0;
+                        i++;
+                    }
+                }
+                filtered = filtered.filter(val => val !== 0);
+                while (filtered.length < this.gridSize) filtered.push(0);
+                return filtered;
+            }
+
+            // 四个方向移动
+            move(direction) {
+                if (this.isGameOver) return;
+
+                const oldGrid = this.grid.map(row => [...row]);
+                const oldScore = this.score;
+
+                if (direction === 'left') {
+                    for (let r = 0; r < this.gridSize; r++) {
+                        this.grid[r] = this.slideRowLeft(this.grid[r]);
+                    }
+                } else if (direction === 'right') {
+                    for (let r = 0; r < this.gridSize; r++) {
+                        this.grid[r] = this.slideRowLeft([...this.grid[r]].reverse()).reverse();
+                    }
+                } else if (direction === 'up') {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        const col = this.grid.map(row => row[c]);
+                        const slided = this.slideRowLeft(col);
+                        for (let r = 0; r < this.gridSize; r++) this.grid[r][c] = slided[r];
+                    }
+                } else if (direction === 'down') {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        const col = this.grid.map(row => row[c]).reverse();
+                        const slided = this.slideRowLeft(col).reverse();
+                        for (let r = 0; r < this.gridSize; r++) this.grid[r][c] = slided[r];
+                    }
+                }
+
+                // 判断是否有效移动
+                const moved = JSON.stringify(oldGrid) !== JSON.stringify(this.grid);
+                if (moved) {
+                    // 保存移动前的状态
+                    this.history = { grid: oldGrid, score: oldScore };
+                    this.addRandomTile();
+                    this.updateScore();
+                    this.render();
+                    if (this.checkGameOver()) this.showGameOver();
+                }
+            }
+
+            // 检测游戏结束
+            checkGameOver() {
+                // 有空格则未结束
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        if (this.grid[r][c] === 0) return false;
+                    }
+                }
+                // 横向可合并
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize - 1; c++) {
+                        if (this.grid[r][c] === this.grid[r][c + 1]) return false;
+                    }
+                }
+                // 纵向可合并
+                for (let c = 0; c < this.gridSize; c++) {
+                    for (let r = 0; r < this.gridSize - 1; r++) {
+                        if (this.grid[r][c] === this.grid[r + 1][c]) return false;
+                    }
+                }
+                return true;
+            }
+
+            showGameOver() {
+                this.isGameOver = true;
+                document.getElementById('finalScore').textContent = `最终得分：${this.score}`;
+                document.getElementById('gameOverlay').style.display = 'flex';
+            }
+
+            hideOverlay() {
+                document.getElementById('gameOverlay').style.display = 'none';
+            }
+
+            // 更新分数显示
+            updateScore() {
+                document.getElementById('score').textContent = this.score;
+                if (this.score > this.bestScore) {
+                    this.bestScore = this.score;
+                    localStorage.setItem('2048_best', this.bestScore);
+                }
+                document.getElementById('bestScore').textContent = this.bestScore;
+            }
+
+            // 渲染所有方块
+            render() {
+                const layerWidth = this.tilesLayer.clientWidth;
+                this.tileSize = (layerWidth - this.gap * 3) / 4;
+
+                this.tilesLayer.innerHTML = '';
+
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        const value = this.grid[r][c];
+                        if (value === 0) continue;
+
+                        const tile = document.createElement('div');
+                        const valueClass = value <= 8192 ? `tile-${value}` : 'tile-super';
+                        tile.className = `tile ${valueClass}`;
+                        tile.textContent = value;
+
+                        tile.style.width = this.tileSize + 'px';
+                        tile.style.height = this.tileSize + 'px';
+                        tile.style.left = (c * (this.tileSize + this.gap)) + 'px';
+                        tile.style.top = (r * (this.tileSize + this.gap)) + 'px';
+
+                        this.tilesLayer.appendChild(tile);
+                    }
+                }
+            }
+
+            // 绑定所有事件
+            bindEvents() {
+                // 键盘控制
+                document.addEventListener('keydown', (e) => {
+                    const keyMap = {
+                        ArrowLeft: 'left',
+                        ArrowRight: 'right',
+                        ArrowUp: 'up',
+                        ArrowDown: 'down'
+                    };
+                    if (keyMap[e.key]) {
+                        e.preventDefault();
+                        this.move(keyMap[e.key]);
+                    }
+                });
+
+                // 触屏滑动控制
+                const board = document.querySelector('.game-board');
+                let startX = 0, startY = 0;
+                const minSwipeDistance = 30;
+
+                board.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }, { passive: false });
+
+                board.addEventListener('touchend', (e) => {
+                    const endX = e.changedTouches[0].clientX;
+                    const endY = e.changedTouches[0].clientY;
+                    const dx = endX - startX;
+                    const dy = endY - startY;
+
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        if (Math.abs(dx) > minSwipeDistance) {
+                            this.move(dx > 0 ? 'right' : 'left');
+                        }
+                    } else {
+                        if (Math.abs(dy) > minSwipeDistance) {
+                            this.move(dy > 0 ? 'down' : 'up');
+                        }
+                    }
+                    e.preventDefault();
+                }, { passive: false });
+
+                // 撤回按钮
+                document.getElementById('undoBtn').addEventListener('click', () => {
+                    this.undo();
+                });
+
+                // 顶部重开按钮
+                document.getElementById('restartBtnTop').addEventListener('click', () => {
+                    if (confirm('确定要重新开始吗？')) {
+                        this.init();
+                    }
+                });
+
+                // 结束弹窗重开按钮
+                document.getElementById('restartBtn').addEventListener('click', () => {
+                    this.init();
+                });
+            }
+        }
+
+        // 启动游戏
+        window.addEventListener('load', () => {
+            const game = new Game2048();
+            // 确保布局完成后正确渲染
+            setTimeout(() => game.render(), 50);
+        });
+    </script>
+</body>
+</html>
