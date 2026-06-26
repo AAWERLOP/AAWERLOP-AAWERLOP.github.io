@@ -48,7 +48,6 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     .ripple {
       position: fixed;
       border-radius: 50%;
@@ -61,7 +60,6 @@
     @keyframes ripple-animation {
       to { transform: scale(4); opacity: 0; }
     }
-
     /* 对齐后的时间部件：和左侧个人信息列对齐，样式统一 */
     .ios-time-widget {
       background: rgba(255,255,255,0.25);
@@ -87,9 +85,7 @@
     }
   </style>
 </head>
-
 <body class="win7-aero-bg min-h-screen font-aero text-dark relative overflow-x-hidden">
-
 <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 py-6">
   <!-- 左侧：时间部件 + 个人信息 + 教育 + 技能 + 证书 -->
   <div class="md:col-span-1 space-y-6">
@@ -98,7 +94,6 @@
       <div class="date" id="iosDate">3月25日周三 · 丙午年二月初七</div>
       <div class="time" id="iosTime">11:58</div>
     </div>
-
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-id-card-alt"></i>个人信息</h2>
       <ul class="space-y-3">
@@ -109,7 +104,6 @@
         <li class="flex items-center gap-3"><i class="fas fa-envelope text-primary"></i><span>邮箱：2684724974@qq.com</span></li>
         <li class="flex items-center gap-3"><i class="fas fa-user-graduate text-primary"></i><span>身份：家里蹲（待业中）</span></li>
       </ul>
-
       <h2 class="win7-title text-2xl mt-8 mb-4 flex items-center gap-2"><i class="fas fa-graduation-cap"></i>教育背景</h2>
       <div class="win7-item">
         <h3 class="font-bold text-[#1e3a6a] text-lg">武汉职业技术学院</h3>
@@ -117,7 +111,6 @@
         <p>人工智能学院 | 计算机应用技术 | 虽然是专科但学校自己努力变成本科了orz</p>
         <p class="mt-1 font-semibold">GPA：3.8/4.0（成绩排名：1%~5%）</p>
       </div>
-
       <h2 class="win7-title text-2xl mt-8 mb-4 flex items-center gap-2"><i class="fas fa-star"></i>技能熟练度</h2>
       <div class="space-y-4">
         <div>
@@ -137,7 +130,6 @@
           <div class="w-full bg-white/30 rounded-full h-2.5"><div class="bg-secondary h-2.5 rounded-full" style="width:85%"></div></div>
         </div>
       </div>
-
       <h2 class="win7-title text-2xl mt-8 mb-4 flex items-center gap-2"><i class="fas fa-certificate"></i>资格证书</h2>
       <div class="space-y-3">
         <div class="win7-item">
@@ -155,7 +147,6 @@
       </div>
     </div>
   </div>
-
   <!-- 右侧：名字卡片 + 竞赛 + 项目 + 求职意向 + 工具箱 -->
   <div class="md:col-span-2 space-y-6">
     <!-- 名字卡片 -->
@@ -165,7 +156,6 @@
       </div>
       <h1 class="text-3xl md:text-4xl font-bold win7-title">樱羽巧可</h1>
     </div>
-
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-trophy"></i>竞赛奖项</h2>
       <div class="bg-white/10 backdrop-blur p-4 rounded-lg">
@@ -177,7 +167,6 @@
         </ul>
       </div>
     </div>
-
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-project-diagram"></i>项目经历</h2>
       
@@ -198,7 +187,6 @@
         <h4 class="font-bold mb-1">🎯 项目成果：</h4>
         <p>公司整体办公效率显著提升，各部门信息共享流畅度大幅改善，打造了高效的企业办公环境。</p>
       </div>
-
       <!-- 项目2：仙鹤楼文旅 -->
       <div class="bg-white/10 backdrop-blur p-4 rounded-lg mb-4">
         <div class="flex justify-between items-center mb-2">
@@ -216,7 +204,6 @@
         <h4 class="font-bold mb-1">🎯 项目成果：</h4>
         <p>品牌曝光度和网站流量显著提升，有效助力公司市场拓展与业务增长，为文旅项目打造了鲜明的视觉品牌。</p>
       </div>
-
       <!-- 项目3：AI简历分析 -->
       <div class="bg-white/10 backdrop-blur p-4 rounded-lg mb-4">
         <div class="flex justify-between items-center mb-2">
@@ -232,7 +219,6 @@
         </ul>
         <p class="mt-1"><b>成果：</b>可快速筛选简历，效率提升80%，已用于校内模拟招聘场景。</p>
       </div>
-
       <!-- 项目4：个人博客 -->
       <div class="bg-white/10 backdrop-blur p-4 rounded-lg mb-4">
         <div class="flex justify-between items-center mb-2">
@@ -248,7 +234,6 @@
         </ul>
         <p class="mt-1"><b>成果：</b>作为个人技术名片，用于求职展示，提升面试通过率。</p>
       </div>
-
       <!-- 项目5：学生管理系统 -->
       <div class="bg-white/10 backdrop-blur p-4 rounded-lg">
         <div class="flex justify-between items-center mb-2">
@@ -265,7 +250,6 @@
         <p class="mt-1"><b>成果：</b>课程设计满分，被班级同学作为参考模板使用。</p>
       </div>
     </div>
-
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2"><i class="fas fa-bullseye"></i>求职意向</h2>
       <div class="bg-white/10 backdrop-blur p-6 rounded-lg text-center">
@@ -276,13 +260,12 @@
         </button>
       </div>
     </div>
-
     <!-- 🧰 工具箱 -->
     <div class="win7-card">
       <h2 class="win7-title text-2xl mb-4 flex items-center gap-2">
         <i class="fas fa-toolbox"></i> 工具箱
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <a href="weather.html" class="win7-glass p-5 flex flex-col items-center text-center hover:bg-white/30">
           <i class="fa-solid fa-sun text-yellow-400 text-3xl mb-2"></i>
           <span class="text-[#1e3a6a] font-bold">☀️ 天气预报</span>
@@ -292,15 +275,27 @@
           <span class="text-[#1e3a6a] font-bold">📊 科学计算器</span>
         </a>
       </div>
+
+      <h3 class="win7-title text-xl mb-3 flex items-center gap-2">
+        <i class="fas fa-gamepad"></i> 游戏区
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="tetris.html" class="win7-glass p-5 flex flex-col items-center text-center hover:bg-white/30">
+          <i class="fa-solid fa-cube text-indigo-400 text-3xl mb-2"></i>
+          <span class="text-[#1e3a6a] font-bold">🧊 俄罗斯方块</span>
+        </a>
+        <a href="game2048.html" class="win7-glass p-5 flex flex-col items-center text-center hover:bg-white/30">
+          <i class="fa-solid fa-th text-orange-400 text-3xl mb-2"></i>
+          <span class="text-[#1e3a6a] font-bold">🔢 2048小游戏</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>
-
 <!-- 悬浮回到顶部按钮 -->
 <button id="backToTop" class="fixed bottom-6 right-6 win7-glass w-12 h-12 flex items-center justify-center text-primary opacity-0 transition-opacity">
   <i class="fas fa-arrow-up"></i>
 </button>
-
 <script>
   // 回到顶部
   const btn = document.getElementById('backToTop');
@@ -310,7 +305,6 @@
   btn.addEventListener('click',()=>{
     window.scrollTo({top:0,behavior:'smooth'});
   });
-
   // 点击波纹
   document.addEventListener("click", (e) => {
     const r = document.createElement("div");
@@ -321,14 +315,12 @@
     document.body.appendChild(r);
     setTimeout(()=>r.remove(),700);
   });
-
   // iOS 时间部件 - 实时更新
   function updateTime() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
     const m = String(now.getMinutes()).padStart(2, '0');
     document.getElementById('iosTime').textContent = `${h}:${m}`;
-
     const month = now.getMonth() + 1;
     const day = now.getDate();
     const week = ['日', '一', '二', '三', '四', '五', '六'][now.getDay()];
@@ -337,6 +329,5 @@
   updateTime();
   setInterval(updateTime, 60000);
 </script>
-
 </body>
 </html>
